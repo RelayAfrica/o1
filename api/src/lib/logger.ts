@@ -1,0 +1,1 @@
+type Level='info'|'warn'|'error';export function log(level:Level,message:string,meta:Record<string,unknown>={}){process.stdout.write(JSON.stringify({timestamp:new Date().toISOString(),level,service:'relay-api',message,...meta})+'\n')}

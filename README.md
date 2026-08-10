@@ -1,21 +1,45 @@
 # Relay
 
-Relay is a merchant operations platform for small and medium businesses in Nigeria. This build covers Phases 1–4: engineering foundation, Firebase-ready configuration, authentication entry points, business onboarding, storefront setup, and genuine dashboard empty states.
+Relay is a merchant operations platform for small and medium businesses in Nigeria. The codebase contains the web dashboard/storefront and an API that owns tenant authorization, catalogue, inventory, orders, customers, delivery, notifications, WhatsApp orchestration, social distribution, and campaigns.
+
+## Current architecture decisions
+
+- WhatsApp uses Meta Cloud API directly; n8n orchestrates workflows and is not a source of truth.
+- Customer checkout is isolated behind the backs.io payment-provider interface.
+- Delivery supports merchant-defined zones, prices, timeframes, scheduled batches, pickup, and optional Uber Direct express delivery.
+- Firestore is the persistence layer and Admin SDK access stays server-side.
+- Environment values are never committed. See [.env.example](.env.example) and [docs/production-context.md](docs/production-context.md).
 
 ## Local development
 
-Copy `.env.example` to `.env`, fill Firebase values when available, then run `npm install` in `web` and `api` and `npm run dev` from the relevant package. Start Firebase emulators with `firebase emulators:start` after installing the Firebase CLI.
+Install dependencies in both packages, copy `.env.example` to local environment files, start Firebase emulators, then run the web and API dev servers.
 
-Environment variables are documented in [.env.example](.env.example). `web/` contains the React/Vite client; `api/` contains the Express service.
+```text
+cd web && npm install && npm run dev
+cd api && npm install && npm run dev
+firebase emulators:start
+```
 
-## Implemented phases
+The API validates production environment requirements at startup. Development may use the Firebase Auth/Firestore emulator variables.
 
-Phases 1–4 are represented. CRM, marketing distribution, and commerce data features are intentionally reserved for later phases.
+## Repository structure
 
-## Stack and tests
+- `web/` — React/Vite dashboard, onboarding, public storefront, PWA shell, push opt-in
+- `api/` — Express API, Firebase Admin, commerce, delivery, CRM, WhatsApp, social, campaigns
+- `shared/` — shared domain types
+- `firestore.rules`, `storage.rules`, `firebase.json` — Firebase infrastructure configuration
+- `render.yaml` — separate Render web/API service definitions
 
-React 18, TypeScript, Vite, React Router, Zustand, TanStack Query, Firebase, Express, and Zod. Run `npm run build` in both packages for production builds and `npm test` in `api` for type checks.
+## Build and tests
+
+```text
+npm run build --prefix web
+npm run build --prefix api
+npm test --prefix api
+```
+
+The test command currently performs strict API type checking. Emulator-backed rules, concurrency, and provider contract tests should run in CI once the Firebase CLI is provisioned in the runner.
 
 ## Deployment
 
-Configure the variables in `.env.example` in your deployment provider and deploy web and API separately via the [Render dashboard](https://dashboard.render.com/).
+Use separate Development, Staging, and Production Firebase projects, Render services, and external credentials. Configure the environment variables in Render and deploy using [render.yaml](render.yaml). Production should expose `/health` for liveness and `/health/deep` for readiness diagnostics.
