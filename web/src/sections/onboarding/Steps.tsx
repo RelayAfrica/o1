@@ -1,0 +1,2 @@
+import {GenericStep} from './GenericStep';export const Branding=()=> <GenericStep step={2} title="Make it yours" copy="Choose a brand color and add your logo when you’re ready." next="/onboarding/storefront"/>;export const Storefront=()=> <GenericStep step={3} title="Set up your storefront" copy="Choose a memorable link for customers to find you online." next="/onboarding/product"/>;export const Product=()=> <GenericStep step={4} title="Add your first product" copy="Start with one product or service. You can add more later." next="/onboarding/publish" skip/>;
+

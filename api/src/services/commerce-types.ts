@@ -1,0 +1,4 @@
+export interface Product{id:string;businessId:string;name:string;description:string;price:number;currency:string;images:string[];categoryId?:string;availability:boolean;inventoryQty:number;deletedAt?:string|null}
+export interface Category{id:string;businessId:string;name:string;sortOrder:number;parentId?:string|null}
+export interface Cart{id:string;businessId:string;sessionId?:string;customerId?:string;items:{productId:string;qty:number;priceAtAdd:number}[];expiresAt:string}
+export interface Order{id:string;businessId:string;customer?:unknown;channel:'web'|'whatsapp';items:{productId:string;qty:number;priceAtAdd:number}[];subtotal:number;currency:string;paymentStatus:'pending'|'paid'|'failed'|'refunded';deliveryStatus:'pending'|'confirmed'|'cancelled';orderStatus:'pending'|'confirmed'|'cancelled';createdAt:string;updatedAt:string}

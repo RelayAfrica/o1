@@ -1,0 +1,2 @@
+import 'dotenv/config';import {z} from 'zod';const schema=z.object({RELAY_ENV:z.enum(['development','staging','production']).default('development'),API_BASE_URL:z.string().url().default('http://localhost:4000'),CORS_ORIGIN:z.string().default('http://localhost:5173'),RATE_LIMIT_WINDOW_MS:z.coerce.number().default(60000),RATE_LIMIT_MAX:z.coerce.number().default(100)});export const config=schema.parse(process.env);
+

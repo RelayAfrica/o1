@@ -1,0 +1,1 @@
+export function Badge({children}:{children:React.ReactNode}){return <span style={{display:'inline-block',padding:'4px 8px',borderRadius:999,background:'var(--green-pale)',color:'var(--green-dark)',fontSize:11,fontWeight:700}}>{children}</span>}

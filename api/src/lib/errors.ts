@@ -1,0 +1,2 @@
+export class AppError extends Error{constructor(public code:string,message:string,public status=400){super(message)}}export const errorHandler=(err:unknown,_req:import('express').Request,res:import('express').Response,_next:import('express').NextFunction)=>{const e=err instanceof AppError?err:new AppError('INTERNAL_ERROR','Something went wrong.',500);res.status(e.status).json({success:false,error:{code:e.code,message:e.message}})};
+
