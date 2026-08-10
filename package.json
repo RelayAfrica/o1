@@ -1,7 +1,6 @@
 {
   "name": "relay",
   "private": true,
-  "scripts": {"dev": "concurrently \"npm --prefix web run dev\" \"npm --prefix api run dev\"", "build": "npm --prefix web run build && npm --prefix api run build", "test": "npm --prefix api run test"},
+  "scripts": {"dev": "concurrently \"cd web && npm run dev\" \"cd api && npm run dev\"", "build": "cd web && npm run build && cd .. && cd api && npm run build", "test": "cd api && npm run test"},
   "devDependencies": {"concurrently": "^9.1.2"}
 }
-
