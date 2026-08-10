@@ -1,1 +1,0 @@
-export function Modal({open,children}:{open:boolean;children:React.ReactNode}){return open?<div style={{position:'fixed',inset:0,background:'rgba(0,0,0,.35)',display:'grid',placeItems:'center',zIndex:10}}><div className="card">{children}</div></div>:null}

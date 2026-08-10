@@ -40,6 +40,23 @@ npm test --prefix api
 
 The test command currently performs strict API type checking. Emulator-backed rules, concurrency, and provider contract tests should run in CI once the Firebase CLI is provisioned in the runner.
 
-## Deployment
+## Render deployment
 
-Use separate Development, Staging, and Production Firebase projects, Render services, and external credentials. Configure the environment variables in Render and deploy using [render.yaml](render.yaml). Production should expose `/health` for liveness and `/health/deep` for readiness diagnostics.
+The repository includes [render.yaml](render.yaml), which defines two services:
+
+- `relay-web` — static Vite output from `web/dist`
+- `relay-api` — Node API listening on Render’s `PORT`, with `/health` as its health check
+
+To deploy:
+
+1. Push this repository to GitHub.
+2. In Render, choose **New → Blueprint**, connect the repository, and select `render.yaml`.
+3. Create separate Render environment groups for Development, Staging, and Production.
+4. Set the API variables from `.env.example` on `relay-api`. At minimum, production needs `RELAY_ENV`, `API_BASE_URL`, `WEB_BASE_URL`, `CORS_ORIGIN`, Firebase Admin credentials, and `TOKEN_ENCRYPTION_KEY`.
+5. Set the client variables on `relay-web` before its build. At minimum, set `VITE_API_BASE_URL` to the public API URL and provide the `VITE_FIREBASE_*` client configuration. Vite embeds these values during the build.
+6. Deploy the API first, confirm `/health` and `/health/deep`, then deploy the web service.
+7. Update `CORS_ORIGIN` to the final web URL and redeploy the API if the web URL changes.
+
+For `FIREBASE_ADMIN_PRIVATE_KEY`, paste the service-account key as a Render secret with escaped newlines (`\n`). The API converts those escaped newlines before initializing Firebase Admin. Never place production credentials in Git or in `web` variables unless they are explicitly `VITE_` client configuration values.
+
+After deployment, configure Firebase Auth authorized domains, Meta/n8n webhook URLs, backs.io webhook URLs, and any Uber Direct callback URL with the deployed API hostname. Production should use separate Firebase, Render, and external-provider credentials from development and staging.

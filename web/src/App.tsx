@@ -1,2 +1,48 @@
-import {Navigate,Route,Routes} from 'react-router-dom';import {AppShell} from './components/layout/AppShell';import {AuthLayout} from './sections/auth/AuthLayout';import {SignIn} from './sections/auth/SignIn';import {SignUp} from './sections/auth/SignUp';import {VerifyEmail} from './sections/auth/VerifyEmail';import {OnboardingShell} from './sections/onboarding/OnboardingShell';import {StepBusinessInfo} from './sections/onboarding/StepBusinessInfo';import {Branding,Storefront,Product} from './sections/onboarding/Steps';import {Publish} from './sections/onboarding/Publish';import {Dashboard} from './sections/Dashboard';import {Storefront as PublicStorefront} from './sections/storefront/Storefront';
-export function App(){return <Routes><Route path="/s/:slug" element={<PublicStorefront/>}/><Route element={<AuthLayout/>}><Route path="/sign-in" element={<SignIn/>}/><Route path="/sign-up" element={<SignUp/>}/><Route path="/verify-email" element={<VerifyEmail/>}/></Route><Route path="/onboarding" element={<OnboardingShell/>}><Route index element={<StepBusinessInfo/>}/><Route path="branding" element={<Branding/>}/><Route path="storefront" element={<Storefront/>}/><Route path="product" element={<Product/>}/><Route path="publish" element={<Publish/>}/></Route><Route element={<AppShell/>}><Route path="/dashboard" element={<Dashboard/>}/><Route path="/crm" element={<Coming title="Customers"/>}/><Route path="/commerce" element={<Coming title="Store"/>}/><Route path="/social" element={<Coming title="Marketing"/>}/></Route><Route path="*" element={<Navigate to="/sign-in" replace/>}/></Routes>}function Coming({title}:{title:string}){return <div className="container"><div className="eyebrow">Coming soon</div><h1>{title}</h1><p className="muted">This Relay wing is being prepared for a future phase.</p></div>}
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { Route, Switch, Router as WouterRouter } from 'wouter';
+
+import { Shell } from './components/layout/Shell';
+import Home from './pages/Home';
+import Customers from './pages/Customers';
+import Marketing from './pages/Marketing';
+import Orders from './pages/Shop';
+import More from './pages/More';
+import Login from './pages/login';
+
+const queryClient = new QueryClient();
+
+function NotFound() {
+  return (
+    <div className="h-full flex flex-col items-center justify-center p-4 text-center">
+      <h2 className="text-2xl font-extrabold mb-2">Page Not Found</h2>
+      <p className="text-muted-foreground font-medium text-sm">The page you're looking for doesn't exist.</p>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+          <Shell>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/" component={Home} />
+              <Route path="/customers" component={Customers} />
+              <Route path="/marketing" component={Marketing} />
+              <Route path="/orders" component={Orders} />
+              <Route path="/more" component={More} />
+              <Route component={NotFound} />
+            </Switch>
+          </Shell>
+        </WouterRouter>
+        <Toaster />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;

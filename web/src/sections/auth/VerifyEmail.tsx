@@ -1,2 +1,0 @@
-import {Link} from 'react-router-dom';export function VerifyEmail(){return <div className="auth-form"><div className="eyebrow">One last step</div><h1>Check your inbox</h1><p className="muted">We sent a verification link to your email. Verify it, then continue to set up your business.</p><ButtonLink/><p className="auth-link"><Link to="/sign-in">Back to sign in</Link></p></div>}function ButtonLink(){return <button className="btn btn-primary" style={{width:'100%',marginTop:20}}>Resend email</button>}
-
