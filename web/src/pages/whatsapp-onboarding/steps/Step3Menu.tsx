@@ -328,7 +328,7 @@ export default function Step3Menu({ data, onChange }: Props) {
                   <input
                     value={newItem.name}
                     onChange={e => setNewItem(p => ({ ...p, name: e.target.value }))}
-                    placeholder="e.g. Jollof Rice Combo"
+                    placeholder="e.g. Product name"
                     className="w-full h-10 rounded-xl border border-[#ECEDF1] bg-white px-3 text-sm font-semibold outline-none focus:border-[#5B4FE8] placeholder:text-[#C0C4CC]"
                   />
                 </div>

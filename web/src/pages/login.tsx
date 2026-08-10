@@ -29,7 +29,7 @@ export default function Login() {
   const handleGoogle = async () => {
     setError("");
     if (!firebaseConfigured || !auth) { setError("Firebase authentication is not configured yet."); return; }
-    try { await signInWithPopup(auth, new GoogleAuthProvider()); navigate("/"); }
+    try { await signInWithPopup(auth, new GoogleAuthProvider()); navigate(tab === "signup" ? "/onboarding" : "/dashboard"); }
     catch (err) { setError(err instanceof Error ? err.message : "Unable to continue with Google."); }
   };
 
@@ -41,7 +41,7 @@ export default function Login() {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
         if (name) await updateProfile(credential.user, { displayName: name });
       } else await signInWithEmailAndPassword(auth, email, password);
-      navigate("/");
+      navigate(tab === "signup" ? "/onboarding" : "/dashboard");
     } catch (err) { setError(err instanceof Error ? err.message : "Unable to authenticate."); }
   };
 

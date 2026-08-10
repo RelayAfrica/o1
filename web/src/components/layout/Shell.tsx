@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Home, Users, Megaphone, Store, MoreHorizontal, Bell, Search, Plus, X, Menu, Settings, HelpCircle, CreditCard, ChevronRight, LogOut, ShoppingBag } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
-import { MOCK_NOTIFICATIONS } from '@/lib/data';
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [showSearch, setShowSearch] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFabMenu, setShowFabMenu] = useState(false);
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+  type Notification = {id:string; type:'order'|'stock'|'campaign'|'appointment'; title:string; time:string; read:boolean};
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -17,7 +17,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   };
 
   const navItems = [
-    { label: 'Home', icon: Home, path: '/' },
+    { label: 'Home', icon: Home, path: '/dashboard' },
     { label: 'Customers', icon: Users, path: '/customers' },
     { label: 'Marketing', icon: Megaphone, path: '/marketing' },
     { label: 'Shop', icon: Store, path: '/orders' },
@@ -25,7 +25,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   ];
 
   const getPageTitle = () => {
-    if (location === '/') return 'Dashboard';
+    if (location === '/dashboard') return 'Dashboard';
     const item = navItems.find(n => n.path === location);
     return item ? item.label : 'Relay';
   };
@@ -56,8 +56,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="mt-auto bg-muted rounded-2xl p-3 flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-lime-light to-lime flex items-center justify-center text-ink font-bold text-sm">AO</div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-bold truncate">Amara's Kitchen</div>
-            <div className="text-[10px] text-muted-foreground truncate">Growth Plan</div>
+            <div className="text-xs font-bold truncate">Your workspace</div>
+            <div className="text-[10px] text-muted-foreground truncate">Not connected</div>
           </div>
         </div>
       </aside>
@@ -127,7 +127,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* FAB Menu */}
-      {(location === '/' || location === '/customers' || location === '/orders') && (
+      {(location === '/dashboard' || location === '/customers' || location === '/orders') && (
         <div className="absolute bottom-24 right-4 md:bottom-8 md:right-8 z-30">
           <button 
             onClick={() => setShowFabMenu(!showFabMenu)}
@@ -176,12 +176,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="p-6 flex-1 overflow-y-auto">
             <h3 className="text-sm font-bold text-muted-foreground mb-4">Recent Searches</h3>
             <div className="flex flex-col gap-3">
-              {['Amara Okafor', 'Jollof Rice', 'ORD-002'].map(s => (
-                <div key={s} className="flex items-center gap-3 text-sm font-bold cursor-pointer hover:text-lime">
-                  <Search size={16} className="text-muted-foreground" />
-                  {s}
-                </div>
-              ))}
+              <p className="text-sm text-muted-foreground">Search becomes available when live workspace data is connected.</p>
             </div>
           </div>
         </div>

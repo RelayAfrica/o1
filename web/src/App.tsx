@@ -10,6 +10,8 @@ import Marketing from './pages/Marketing';
 import Orders from './pages/Shop';
 import More from './pages/More';
 import Login from './pages/login';
+import OnboardingWizard from './pages/whatsapp-onboarding/OnboardingWizard';
+import {useLocation} from 'wouter';
 
 const queryClient = new QueryClient();
 
@@ -22,22 +24,33 @@ function NotFound() {
   );
 }
 
+function OnboardingRoute() {
+  const [, navigate] = useLocation();
+  return <OnboardingWizard onPublished={() => navigate('/')} />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <Shell>
-            <Switch>
-              <Route path="/login" component={Login} />
-              <Route path="/" component={Home} />
-              <Route path="/customers" component={Customers} />
-              <Route path="/marketing" component={Marketing} />
-              <Route path="/orders" component={Orders} />
-              <Route path="/more" component={More} />
-              <Route component={NotFound} />
-            </Switch>
-          </Shell>
+          <Switch>
+            <Route path="/" component={Login} />
+            <Route path="/login" component={Login} />
+            <Route path="/onboarding" component={OnboardingRoute} />
+            <Route>
+              <Shell>
+                <Switch>
+                  <Route path="/dashboard" component={Home} />
+                  <Route path="/customers" component={Customers} />
+                  <Route path="/marketing" component={Marketing} />
+                  <Route path="/orders" component={Orders} />
+                  <Route path="/more" component={More} />
+                  <Route component={NotFound} />
+                </Switch>
+              </Shell>
+            </Route>
+          </Switch>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

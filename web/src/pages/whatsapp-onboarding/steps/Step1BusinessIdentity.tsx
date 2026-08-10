@@ -91,7 +91,7 @@ export default function Step1BusinessIdentity({ data, onChange }: Props) {
           <StyledInput
             value={data.restaurantName}
             onChange={e => onChange({ restaurantName: e.target.value })}
-            placeholder="e.g. Amara's Kitchen"
+            placeholder="e.g. Your business name"
           />
         </Field>
         <Field label="Cuisine type / short description" required hint="Used in the bot's intro message to customers">
