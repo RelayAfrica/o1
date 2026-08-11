@@ -142,7 +142,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* FAB Menu */}
-      {(location === '/dashboard' || location === '/customers' || location === '/orders') && (
+      {location === '/dashboard' && (
         <div className="absolute bottom-24 right-4 md:bottom-8 md:right-8 z-30">
           <button 
             onClick={() => setShowFabMenu(!showFabMenu)}
