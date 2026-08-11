@@ -1,17 +1,15 @@
 export type SetupStatus = 'not_started' | 'in_progress' | 'completed' | 'skipped';
-export type SetupSectionId = 'basic' | 'social' | 'branding' | 'location' | 'kyc' | 'inventory' | 'fulfillment' | 'bank';
+export type SetupSectionId = 'basic' | 'social' | 'branding' | 'location' | 'inventory' | 'fulfillment';
 export type SetupSection = {id: SetupSectionId; label: string; required: boolean; weight: number};
 export type SetupProgress = {rewardGranted: boolean; sections: Record<SetupSectionId, SetupStatus>; lastPromptedAt?: string; reminderScheduledFor?: string};
 
 export const SETUP_SECTIONS: SetupSection[] = [
-  {id:'basic',label:'Basic business info',required:true,weight:14},
-  {id:'social',label:'Social media links',required:false,weight:14},
-  {id:'branding',label:'Logo and banner',required:true,weight:12},
-  {id:'location',label:'Location or service area',required:true,weight:11},
-  {id:'kyc',label:'KYC verification',required:true,weight:11},
-  {id:'inventory',label:'First inventory item',required:true,weight:10},
-  {id:'fulfillment',label:'Pickup and delivery',required:false,weight:9},
-  {id:'bank',label:'Withdrawal bank account',required:true,weight:7},
+  {id:'basic',label:'Basic business info',required:true,weight:18},
+  {id:'social',label:'Social media links',required:false,weight:16},
+  {id:'branding',label:'Logo and banner',required:true,weight:16},
+  {id:'location',label:'Location or service area',required:true,weight:15},
+  {id:'inventory',label:'First inventory item',required:true,weight:15},
+  {id:'fulfillment',label:'Pickup and delivery',required:false,weight:8},
 ];
 
 export const SETUP_KEY = 'relay_setup_progress_v1';

@@ -19,7 +19,7 @@ const defaultItem = (): Omit<MenuItem, 'id'> => ({
   name: '',
   price: 0,
   description: '',
-  photoDataUrl: '',
+  photoDataUrls: [],
   inStock: true,
   allergens: [],
   allergenOther: '',
@@ -168,11 +168,17 @@ export default function Step3Menu({ data, onChange }: Props) {
   };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setNewItem(p => ({ ...p, photoDataUrl: reader.result as string }));
-    reader.readAsDataURL(file);
+    const files = Array.from(e.target.files ?? []).slice(0, 3 - newItem.photoDataUrls.length);
+    if (!files.length) return;
+    Promise.all(files.map(file => new Promise<string>((resolve, reject) => {
+      if (file.size > 5 * 1024 * 1024) { reject(new Error('Images must be 5 MB or smaller.')); return; }
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result));
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    })))
+      .then(images => setNewItem(p => ({ ...p, photoDataUrls: [...p.photoDataUrls, ...images].slice(0, 3) })))
+      .catch(() => undefined);
   };
 
   const itemsByCategory = (catId: string) => data.items.filter(i => i.categoryId === catId);
@@ -306,19 +312,10 @@ export default function Step3Menu({ data, onChange }: Props) {
 
               {/* Photo */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#8A8F98]">Photo</label>
-                <div className="flex items-center gap-3">
-                  <label className="w-16 h-16 rounded-[14px] border-2 border-dashed border-[#ECEDF1] bg-white flex items-center justify-center cursor-pointer hover:border-[#5B4FE8] overflow-hidden flex-none">
-                    {newItem.photoDataUrl ? (
-                      <img src={newItem.photoDataUrl} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <Upload size={16} className="text-[#C0C4CC]" />
-                    )}
-                    <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
-                  </label>
-                  {newItem.photoDataUrl && (
-                    <button onClick={() => setNewItem(p => ({ ...p, photoDataUrl: '' }))} className="text-xs text-[#E74C3C] font-semibold">Remove</button>
-                  )}
+                <label className="text-xs font-bold text-[#8A8F98]">Product images <span className="font-normal">(up to 3)</span></label>
+                <div className="flex flex-wrap items-center gap-3">
+                  {newItem.photoDataUrls.map((image, index) => <div key={`${image.slice(0, 12)}-${index}`} className="relative w-16 h-16"><img src={image} alt={`Product image ${index + 1}`} className="w-full h-full rounded-[14px] object-cover" /><button type="button" onClick={() => setNewItem(p => ({ ...p, photoDataUrls: p.photoDataUrls.filter((_, imageIndex) => imageIndex !== index) }))} className="absolute -right-2 -top-2 w-5 h-5 rounded-full bg-[#E74C3C] text-white text-xs">×</button></div>)}
+                  {newItem.photoDataUrls.length < 3 && <label className="w-16 h-16 rounded-[14px] border-2 border-dashed border-[#ECEDF1] bg-white flex items-center justify-center cursor-pointer hover:border-[#5B4FE8] overflow-hidden flex-none"><Upload size={16} className="text-[#C0C4CC]" /><input type="file" accept="image/*" multiple className="hidden" onChange={handlePhotoUpload} /></label>}
                 </div>
               </div>
 
@@ -474,8 +471,8 @@ export default function Step3Menu({ data, onChange }: Props) {
             return (
               <div key={item.id} className="rounded-[20px] border border-[#ECEDF1] bg-white overflow-hidden">
                 <div className="flex items-center gap-3 px-4 py-3">
-                  {item.photoDataUrl ? (
-                    <img src={item.photoDataUrl} alt="" className="w-11 h-11 rounded-[12px] object-cover flex-none" />
+                  {item.photoDataUrls[0] ? (
+                    <img src={item.photoDataUrls[0]} alt="" className="w-11 h-11 rounded-[12px] object-cover flex-none" />
                   ) : (
                     <div className="w-11 h-11 rounded-[12px] bg-[#F5F6F8] flex items-center justify-center flex-none text-lg">
                       {cat?.emoji ?? '🍽️'}

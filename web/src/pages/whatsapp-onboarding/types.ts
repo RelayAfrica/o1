@@ -67,8 +67,8 @@ export interface MenuItem {
   name: string;
   price: number;
   description: string;
-  /** base64 data URL or empty string */
-  photoDataUrl: string;
+  /** Up to three base64 data URLs for the item */
+  photoDataUrls: string[];
   inStock: boolean;
   allergens: AllergenTag[];
   allergenOther: string;

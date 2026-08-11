@@ -4,7 +4,7 @@ import {requireRole, requireTenant} from '../middleware/auth';
 import {adminDb} from '../services/firebase-admin';
 import {AppError} from '../lib/errors';
 
-const sectionIds = ['basic','social','branding','location','kyc','inventory','fulfillment','bank'] as const;
+const sectionIds = ['basic','social','branding','location','inventory','fulfillment'] as const;
 const sectionStatus = z.enum(['not_started','in_progress','completed','skipped']);
 const progressPatch = z.object({
   sections: z.record(z.enum(sectionIds), sectionStatus).optional(),

@@ -11,6 +11,7 @@ import Orders from './pages/Shop';
 import More from './pages/More';
 import Login from './pages/login';
 import SetupWizard from './pages/setup/SetupWizard';
+import SetupComplete from './pages/setup/SetupComplete';
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ function App() {
           <Switch>
             <Route path="/" component={Login} />
             <Route path="/login" component={Login} />
+            <Route path="/onboarding/complete" component={SetupComplete} />
             <Route path="/onboarding" component={OnboardingRoute} />
             <Route>
               <Shell>

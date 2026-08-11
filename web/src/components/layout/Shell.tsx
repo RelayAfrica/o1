@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Users, Megaphone, Store, MoreHorizontal, Bell, Search, Plus, X, Menu, Settings, HelpCircle, CreditCard, ChevronRight, LogOut, ShoppingBag } from 'lucide-react';
+import { Home, Users, Megaphone, Store, MoreHorizontal, Bell, Search, Plus, X, Menu, Settings, HelpCircle, CreditCard, ChevronRight, LogOut, Package, ShoppingBag } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { readSetupProgress, setupComplete, setupPercent } from '@/lib/setup-progress';
 
@@ -155,18 +155,18 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <>
               <div className="fixed inset-0 z-20" onClick={() => setShowFabMenu(false)} />
               <div className="absolute bottom-20 right-0 w-56 bg-card rounded-3xl p-3 shadow-[0_20px_50px_rgba(22,33,62,0.3)] z-30 flex flex-col gap-1 animate-in slide-in-from-bottom-5">
-                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted font-bold text-sm text-left transition-colors" onClick={() => setShowFabMenu(false)}>
-                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-ink"><ShoppingBag size={18}/></div>
-                  New Order
-                </button>
-                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted font-bold text-sm text-left transition-colors" onClick={() => setShowFabMenu(false)}>
-                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-ink"><Users size={18}/></div>
-                  Add Customer
-                </button>
-                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted font-bold text-sm text-left transition-colors" onClick={() => setShowFabMenu(false)}>
+                <Link href="/marketing" onClick={() => setShowFabMenu(false)} className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted font-bold text-sm text-left transition-colors">
                   <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-ink"><Megaphone size={18}/></div>
-                  Create Campaign
-                </button>
+                  New campaign
+                </Link>
+                <Link href="/customers" onClick={() => setShowFabMenu(false)} className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted font-bold text-sm text-left transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-ink"><Users size={18}/></div>
+                  Manually add customer
+                </Link>
+                <Link href="/orders" onClick={() => setShowFabMenu(false)} className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted font-bold text-sm text-left transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-ink"><Package size={18}/></div>
+                  Manage inventory
+                </Link>
               </div>
             </>
           )}
