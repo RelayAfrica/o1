@@ -87,7 +87,7 @@ export default function DemoModal({ open, onClose }: DemoModalProps) {
                       </div>
 
                       <div className="space-y-1.5">
-                        <Label htmlFor="modal-email" className="text-sm font-medium text-foreground">Work email</Label>
+                        <Label htmlFor="modal-email" className="text-sm font-medium text-foreground">Email</Label>
                         <Input id="modal-email" type="email" placeholder="james@yourbank.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="h-11 rounded-xl border-border bg-background" data-testid="input-modal-email" />
                       </div>
 

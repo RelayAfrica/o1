@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Home, Users, Megaphone, Store, MoreHorizontal, Bell, Search, Plus, X, Menu, Settings, HelpCircle, CreditCard, ChevronRight, LogOut, ShoppingBag } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
+import { readSetupProgress, setupComplete, setupPercent } from '@/lib/setup-progress';
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -9,6 +10,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [showFabMenu, setShowFabMenu] = useState(false);
   type Notification = {id:string; type:'order'|'stock'|'campaign'|'appointment'; title:string; time:string; read:boolean};
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [setupProgress, setSetupProgress] = useState(readSetupProgress);
+
+  React.useEffect(() => {
+    const refresh = () => setSetupProgress(readSetupProgress());
+    window.addEventListener('relay-setup-progress', refresh);
+    return () => window.removeEventListener('relay-setup-progress', refresh);
+  }, []);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -86,6 +94,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <h1 className="text-xl md:text-2xl font-extrabold">{getPageTitle()}</h1>
           
           <div className="flex items-center gap-2">
+            {!setupComplete(setupProgress) && (
+              <Link href="/onboarding" className="flex items-center gap-1.5 rounded-full bg-lime-pale px-2.5 py-2 text-[11px] font-extrabold text-ink hover:bg-lime md:px-3 md:text-xs">
+                <span className="hidden md:inline">Finish setup</span>
+                <span className="inline md:hidden">Setup</span>
+                <span>{setupPercent(setupProgress)}%</span>
+              </Link>
+            )}
             <button 
               onClick={() => setShowSearch(true)}
               className="w-10 h-10 rounded-full flex items-center justify-center bg-card shadow-soft text-ink hover:bg-muted transition-colors"
@@ -176,7 +191,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="p-6 flex-1 overflow-y-auto">
             <h3 className="text-sm font-bold text-muted-foreground mb-4">Recent Searches</h3>
             <div className="flex flex-col gap-3">
-              <p className="text-sm text-muted-foreground">Search becomes available when live workspace data is connected.</p>
+              <p className="text-sm text-muted-foreground">Search becomes available when  data is connected.</p>
             </div>
           </div>
         </div>

@@ -10,8 +10,7 @@ import Marketing from './pages/Marketing';
 import Orders from './pages/Shop';
 import More from './pages/More';
 import Login from './pages/login';
-import OnboardingWizard from './pages/whatsapp-onboarding/OnboardingWizard';
-import {useLocation} from 'wouter';
+import SetupWizard from './pages/setup/SetupWizard';
 
 const queryClient = new QueryClient();
 
@@ -25,8 +24,7 @@ function NotFound() {
 }
 
 function OnboardingRoute() {
-  const [, navigate] = useLocation();
-  return <OnboardingWizard onPublished={() => navigate('/')} />;
+  return <SetupWizard />;
 }
 
 function App() {

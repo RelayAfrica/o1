@@ -98,7 +98,7 @@ export default function ContactPage() {
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="contact-email" className="text-sm font-medium">Work email</Label>
+                        <Label htmlFor="contact-email" className="text-sm font-medium">Email</Label>
                         <Input
                           id="contact-email"
                           type="email"

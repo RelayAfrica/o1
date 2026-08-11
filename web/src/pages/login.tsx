@@ -26,21 +26,29 @@ export default function Login() {
   const [error, setError] = useState("");
   const [, navigate] = useLocation();
 
+  const persistOwnerName = (value: string) => {
+    const trimmed = value.trim();
+    if (trimmed) localStorage.setItem("relay_owner_name", trimmed);
+  };
+
   const handleGoogle = async () => {
     setError("");
+    if (tab === "signup" && !name.trim()) { setError("Full name is required to create your Relay account."); return; }
     if (!firebaseConfigured || !auth) { setError("Firebase authentication is not configured yet."); return; }
-    try { await signInWithPopup(auth, new GoogleAuthProvider()); navigate(tab === "signup" ? "/onboarding" : "/dashboard"); }
+    try { const credential = await signInWithPopup(auth, new GoogleAuthProvider()); const ownerName = name.trim() || credential.user.displayName || ""; if (tab === "signup") await updateProfile(credential.user, { displayName: ownerName }); persistOwnerName(ownerName); navigate(tab === "signup" ? "/onboarding" : "/dashboard"); }
     catch (err) { setError(err instanceof Error ? err.message : "Unable to continue with Google."); }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); setError("");
+    if (tab === "signup" && !name.trim()) { setError("Full name is required to create your Relay account."); return; }
     if (!firebaseConfigured || !auth) { setError("Firebase authentication is not configured yet."); return; }
     try {
       if (tab === "signup") {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
-        if (name) await updateProfile(credential.user, { displayName: name });
-      } else await signInWithEmailAndPassword(auth, email, password);
+        await updateProfile(credential.user, { displayName: name.trim() });
+        persistOwnerName(name);
+      } else { const credential = await signInWithEmailAndPassword(auth, email, password); persistOwnerName(credential.user.displayName || ""); }
       navigate(tab === "signup" ? "/onboarding" : "/dashboard");
     } catch (err) { setError(err instanceof Error ? err.message : "Unable to authenticate."); }
   };
@@ -185,7 +193,7 @@ export default function Login() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="email" className="text-sm font-medium text-foreground">
-                      Work email
+                      Email
                     </Label>
                     <Input
                       id="email"
