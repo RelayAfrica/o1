@@ -28,7 +28,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     { label: 'Home', icon: Home, path: '/dashboard' },
     { label: 'Customers', icon: Users, path: '/customers' },
     { label: 'Marketing', icon: Megaphone, path: '/marketing' },
-    { label: 'Shop', icon: Store, path: '/orders' },
+    { label: 'Shop', icon: Store, path: '/shop' },
     { label: 'More', icon: MoreHorizontal, path: '/more' },
   ];
 
@@ -163,7 +163,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                   <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-ink"><Users size={18}/></div>
                   Manually add customer
                 </Link>
-                <Link href="/orders" onClick={() => setShowFabMenu(false)} className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted font-bold text-sm text-left transition-colors">
+                <Link href="/shop" onClick={() => setShowFabMenu(false)} className="flex items-center gap-3 p-3 rounded-2xl hover:bg-muted font-bold text-sm text-left transition-colors">
                   <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-ink"><Package size={18}/></div>
                   Manage inventory
                 </Link>

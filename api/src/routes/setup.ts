@@ -11,8 +11,11 @@ const progressPatch = z.object({
   lastPromptedAt: z.string().datetime().optional(),
   reminderScheduledFor: z.string().datetime().optional(),
 }).strict();
+const profilePatch=z.object({name:z.string().min(2).max(120).optional(),category:z.string().optional(),description:z.string().optional(),logo:z.string().optional(),banner:z.string().optional(),address:z.string().optional(),serviceArea:z.string().optional(),social:z.record(z.string()).optional(),fulfillment:z.array(z.string()).optional()}).strict();
 
 export const setup = Router();
+
+setup.put('/:businessId/profile', requireTenant, requireRole('owner','admin'), async (req,res,next)=>{try{const parsed=profilePatch.parse(req.body);await adminDb.collection('businesses').doc(req.businessId!).set({...parsed,updatedAt:new Date().toISOString()}, {merge:true});return res.json({success:true,data:{businessId:req.businessId,...parsed}})}catch(error){return next(new AppError('VALIDATION_ERROR',error instanceof Error?error.message:'Invalid business profile'))}});
 
 setup.get('/:businessId/setup-progress', requireTenant, async (req, res, next) => {
   try {

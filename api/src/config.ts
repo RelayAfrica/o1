@@ -5,7 +5,8 @@ const schema=z.object({
   API_BASE_URL:z.string().url().default('http://localhost:4000'),
   WEB_BASE_URL:z.string().url().default('http://localhost:5173'),
   CORS_ORIGIN:z.string().default('http://localhost:5173'),
-  FIREBASE_ADMIN_PROJECT_ID:z.string().optional(),FIREBASE_ADMIN_CLIENT_EMAIL:z.string().email().optional(),FIREBASE_ADMIN_PRIVATE_KEY:z.string().optional(),
+  PORT:z.coerce.number().int().positive().default(4000),
+  FIREBASE_ADMIN_PROJECT_ID:z.string().optional(),FIREBASE_ADMIN_CLIENT_EMAIL:z.string().email().optional(),FIREBASE_ADMIN_PRIVATE_KEY:z.string().optional(),FIREBASE_ADMIN_SERVICE_ACCOUNT_FILE:z.string().optional(),
   TOKEN_ENCRYPTION_KEY:z.string().optional(),
   FIRESTORE_EMULATOR_HOST:z.string().optional(),FIREBASE_AUTH_EMULATOR_HOST:z.string().optional(),
   RATE_LIMIT_WINDOW_MS:z.coerce.number().int().positive().default(60000),RATE_LIMIT_MAX:z.coerce.number().int().positive().default(100),
@@ -13,7 +14,7 @@ const schema=z.object({
 });
 const parsed=schema.parse(process.env);
 if(parsed.RELAY_ENV!=='development'){
-  if(!parsed.FIREBASE_ADMIN_PROJECT_ID||!parsed.FIREBASE_ADMIN_CLIENT_EMAIL||!parsed.FIREBASE_ADMIN_PRIVATE_KEY)throw new Error('Missing Firebase Admin credentials for non-development environment.');
+  if(!parsed.FIREBASE_ADMIN_PROJECT_ID||(!parsed.FIREBASE_ADMIN_SERVICE_ACCOUNT_FILE&&(!parsed.FIREBASE_ADMIN_CLIENT_EMAIL||!parsed.FIREBASE_ADMIN_PRIVATE_KEY)))throw new Error('Missing Firebase Admin credentials for non-development environment.');
   if(!parsed.TOKEN_ENCRYPTION_KEY||parsed.TOKEN_ENCRYPTION_KEY.length<64)throw new Error('TOKEN_ENCRYPTION_KEY must be at least 64 hex characters outside development.');
 }
 export const config=parsed;

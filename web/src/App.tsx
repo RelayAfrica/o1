@@ -12,6 +12,7 @@ import More from './pages/More';
 import Login from './pages/login';
 import SetupWizard from './pages/setup/SetupWizard';
 import SetupComplete from './pages/setup/SetupComplete';
+import Storefront from './pages/Storefront';
 
 const queryClient = new QueryClient();
 
@@ -38,13 +39,15 @@ function App() {
             <Route path="/login" component={Login} />
             <Route path="/onboarding/complete" component={SetupComplete} />
             <Route path="/onboarding" component={OnboardingRoute} />
+            <Route path="/store/:businessSlug" component={Storefront} />
+            <Route path="/store/:businessSlug/:rest*" component={Storefront} />
             <Route>
               <Shell>
                 <Switch>
                   <Route path="/dashboard" component={Home} />
                   <Route path="/customers" component={Customers} />
                   <Route path="/marketing" component={Marketing} />
-                  <Route path="/orders" component={Orders} />
+                  <Route path="/shop" component={Orders} />
                   <Route path="/more" component={More} />
                   <Route component={NotFound} />
                 </Switch>
